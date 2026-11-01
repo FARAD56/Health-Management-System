@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Patient Details
+{% endblock title %}
+
+{% block content %}
+  
+    <!-- RIGHT SIDE -->
+    <div class="main_body transition-all duration-500 md:w-4/5 w-full sm:ml-auto bg-slate-200">
+      
+      <!-- Header -->
+      <div class="bg-slate-400 h-auto sm:h-auto pb-20 lg:pb-2">
+
+        <div class="py-4 ml-10">
+          <h1 class="font-bold text-md sm:text-xl text-slate-900">Patient</h1>
+          <h2 class=" font-bold text-sm sm:text-lg text-slate-900">
+            {% if request.user.is_staff %}
+            <a href="{% url 'doctor_dashboard' request.user.profile_id %}">Home</a>
+            {% else %}
+            <a href="{% url 'dashboard' request.user.profile_id %}">Home</a>
+            {% endif %}
+             | <span><a href="{% url 'patient_details' patient.profile_id %}">{{patient.first_name}}</a></span></h2>
+        </div>
+
+        <!-- Header Profile -->
+        <div class="h-[20%] bg-gray-100 mb-4 flex justify-center mx-4 sm:mx-8 md:mx-10 lg:mx-16  rounded-lg">
+          <div class="flex text-sm sm:text-lg p-5 text-slate-900 font-bold">
+            <div class="flex flex-col justify-center text-center mx-2" >
+              <img src="{{patient.profilemodel.profile_picture.url}}" alt="" class="rounded-[100%] w-[80px] h-[80px] ">
+              <h1 class="text-xs xs:text-sm sm:text-[16px] mt-2">{{patient.profile_id}}</h1>
+            </div>
+            <div class=" text-gray-800 mx-3 flex justify-between items-center">
+              <div class="text-xs xs:text-sm sm:text-[16px]">
+                <h1>Name : {{patient.full_name}} </h1>
+                <h1>Sex : {{patient.sex}} </h1>
+                <h1>Age : {{patient.age}} </h1>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <!-- End Header Profile -->
+
+        <!-- Header Profile -->
+        <div class="hover:shadow-2xl text-[11px] sm:text-sm my-4 px-4 py-[10px] sm:px-6 mx-4 sm:mx-8 md:mx-10 lg:mx-16 bg-white shadow-lg rounded-lg">
+
+          <div class="flex items-center justify-between my-2">
+            <div>
+              <h1 class="uppercase font-bold text-center">Date</h1>
+              <p class="text-center">{{booking.date_created}}</p>
+            </div>
+  
+            <div class="hidden xxs:block">
+              <h1 class="uppercase font-bold text-center">Temperature</h1>
+              <p class="text-center">{{booking.temperature}} degrees</p>
+            </div>
+  
+            <div class="hidden xs:block">
+              <h1 class="uppercase font-bold text-center">Blood Pressure</h1>
+              <p class="text-center">{{booking.blood_pressure}} bpm</p>
+            </div>
+
+            <div class="items-center">
+              <h1 class="uppercase font-bold text-center">Triage</h1>
+              {% if booking.triage == 'CRITICAL' %} 
+                <block class="bg-red-700 text-transparent">aaaaaaa</block>
+              {% elif booking.triage == 'SEVERE' %}
+                <block class="bg-yellow-500 text-transparent">aaaaaaa</block>
+              {% else  %}
+                <block class="bg-green-700 text-transparent">aaaaaaa</block>
+              {% endif %}
+            </div>
+  
+            <a href="{% url 'patient_attendance' patient.profile_id %}">
+              <button class="rounded bg-blue-700 px-1 sm:px-4 py-1 text-xs uppercase text-white">
+                Attend
+              </button>
+            </a>
+
+          </div>
+
+          <div class="mt-4">
+            <h1 class="uppercase font-bold mb-2">Comments</h1>
+            <p>{{booking.comments}}</p>
+          </div>
+
+        </div>
+        <!-- End Header Profile -->
+
+        <div class="sm:flex space-y-10 sm:space-y-0 px-1 sm:px-4 md:px-8">
+
+          <div class="block space-y-1 mx-auto text-center w-3/5 sm:w-3/10 rounded-lg bg-white p-4 sm:mx-6 items-center">
+            <a href="{% url 'user_profile' patient.profile_id %}">
+              <div class="flex flex-col items-center justify-center">
+                <h5
+                  class="text-lg font-bold leading-tight text-neutral-800">
+                   View Profile
+                </h5>
+  
+                <img src="{{patient.profilemodel.profile_picture.url}}" alt="" class="h-10 w-15 rounded-lg">
+
+              </div>
+            </a>
+          </div>
+
+          <div class="space-y-4 mx-auto text-center block w-3/5 sm:w-3/10 rounded-lg bg-white p-4 sm:mx-6 items-center">
+            <a href="{% url 'get_medical_record' patient.profile_id %}">
+              <div>
+                <h5
+                  class="text-lg font-bold leading-tight text-neutral-800">
+                  Medical Records
+                </h5>
+                <!-- put an icon here -->
+              </div>
+            </a>
+          </div>
+
+          <div class="space-y-4 mx-auto text-center block w-3/5 sm:w-3/10 rounded-lg bg-white p-4 sm:mx-6 items-center">
+            <a href="{% url 'medication' patient.profile_id %}">
+              <div>
+                <h5
+                  class="text-lg font-bold leading-tight text-neutral-800">
+                  Medication
+                </h5>
+                <!-- PUT an icon here -->
+              </div>
+            </a>
+          </div>
+
+        </div>
+
+      </div> 
+      <!-- End Header -->
+
+    </div>
+    <!-- END RIGHT SIDE -->
+
+{% endblock content %} 

@@ -1,0 +1,20 @@
+# Ignore Python bytecode and other compiled files
+*.pyc
+__pycache__/
+
+# Ignore the .env file containing secrets
+.env
+
+# Ignore virtual environment directories
+venv/
+
+# Ignore node_modules directory (for JavaScript dependencies)
+node_modules/
+
+# Ignore database files
+*.sqlite3
+
+# Ignore logs and temporary files
+*.log
+tmp/
+secrets/

@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Medical Record
+{% endblock title %}
+
+{% block content %}
+
+<!-- RIGHT SIDE -->
+<div class="main_body transition-all duration-500 pb-8 md:w-4/5 w-full sm:ml-auto min-h-screen bg-slate-400">
+
+  <div class="py-4 ml-10">
+    <h1 class="font-bold text-md sm:text-xl text-slate-900">Add patient</h1>
+    <h2 class=" font-bold text-sm sm:text-lg text-slate-900">
+      {% if request.user.is_staff %}
+      <a href="{% url 'doctor_dashboard' request.user.profile_id %}">Home</a>
+      {% else %}
+      <a href="{% url 'dashboard' request.user.profile_id %}">Home</a>
+      {% endif %}
+       | <span><a
+          href="{% url 'patient_attendance' patient.profile_id %}">Attent to Patient</a></span></h2>
+  </div>
+
+  <div class="text-xs sm:text-sm mb-16 md:mb-4 mt-4 mx-2 sm:mx-8 h-full pb-4 bg-white shadow-lg rounded-lg">
+
+    <!-- Form Title -->
+    <div class="bg-slate-700 w-full py-2 px-8 rounded-t-lg">
+      <h1 class="text-white font-bold text-lg">Attend to Patient</h1>
+    </div>
+    <!-- End Form Title -->
+
+    <!-- Temperature and blood pressure -->
+    <div class="flex flex-col justify-between lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6 my-4 px-4 sm:px-8">
+
+      <div class="flex text-sm font-bold space-x-2">
+        <h1>Temperature : </h1>
+        <h1>{{bookings.temperature}} degrees Celsius</h1>
+      </div>
+
+      <div class=" flex text-sm font-bold space-x-2">
+        <h1>Blood Pressure : </h1>
+        <h1> {{bookings.blood_pressure}} mmHg</h1>
+      </div>
+
+      <div class=" flex text-sm font-bold space-x-2">
+        <h1 class="uppercase font-bold text-center">Triage</h1>
+        {% if bookings.triage == 'CRITICAL' %}
+        <block class="bg-red-700 text-transparent">aaaaaaa</block>
+        {% elif bookings.triage == 'SEVERE' %}
+        <block class="bg-yellow-500 text-transparent">aaaaaaa</block>
+        {% else %}
+        <block class="bg-green-700 text-transparent">aaaaaaa</block>
+        {% endif %}
+      </div>
+
+    </div>
+    <!-- End Temperature and blood pressure -->
+
+    <!-- comment -->
+    <div class="px-4 sm:px-8 my-4">
+      <h1 class="font-bold">Comments</h1>
+      <p>{{bookings.comments}}</p>
+    </div>
+    <!-- End comment -->
+
+    <!-- Messages -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} border px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{ message }}</span>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <!-- end mesages -->
+
+    <!-- Diagnosis -->
+    <form method="POST" action="{% url 'add_diagnosis' patient.profile_id %}">
+      {% csrf_token %}
+      <div class="px-4 sm:px-8 my-4">
+
+        <div class="bg-slate-700 flex items-center justify-between w-full py-2 px-2 sm:px-4 lg:px-8 rounded-t-lg">
+          <h1 class="text-white font-bold text-[16px]">Diagnosis</h1>
+          <img src="{% static 'images/icons8-add-48.png' %}" alt="" class="w-8 h-8">
+        </div>
+
+        <div class="w-full p-2 sm:px-4 lg:px-8 shadow-lg bg-slate-200">
+
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 my-4 justify-between">
+
+            <div class="w-full sm:w-1/2 text-xxs md:text-sm flex items-center mr-0 lg:mr-4">
+              <div class="w-[40%] sm:w-[30%]">
+                <label for="diagnosis" class="text-slate-900 font-bold">Diagnosis : </label>
+              </div>
+              <div class="w-[60%] sm:w-[70%]">
+                <select name="diagnosis" id="diagnosis"
+                  class="md:mx-4 border bg-slate-200 rounded-lg p-2 w-[90%] sm:[w-80%] border-black">
+                  <option value="">Select One </option>
+                  <option value="Headache">Headache</option>
+                  <option value="Seizures">Seizures</option>
+                  <option value="Diabetes">Diabetes</option>
+                  <option value="Hypertension">Hypertension</option>
+                  <option value="Malaria">Malaria</option>
+                  <option value="Depression">Depression</option>
+                  <option value="Pneumonia">Pneumonia</option>
+                  <option value="Arthritis">Arthritis</option>
+                  <option value="Dermatitis">Dermatitis</option>
+                  <option value="Back pain">Back pain</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="w-full sm:w-1/2 text-xxs md:text-sm lg:text-md flex items-center">
+              <div class="w-[40%] sm:w-[30%]">
+                <label for="diagnosis_type" class="text-slate-900 font-bold">Type : </label>
+              </div>
+              <div class="w-[60%] sm:w-[70%]">
+                <select name="diagnosis_type" id="diagnosis_type"
+                  class="md:mx-4 border bg-slate-200 rounded-lg p-2 w-[90%] border-black">
+                  <option value="option1">Select One </option>
+                  <option value="Chronic">Chronic</option>
+                  <option value="Acute">Acute</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex justify-center">
+            <button type="submit" class="bg-blue-700 text-white font-bold my-4 py-2 px-4 rounded-lg">Add</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <!-- End Diagnosis -->
+
+    <!-- To add prescription or lab test -->
+    <div class="bg-white p-2 sm:px-4 lg:px-8 pb-4">
+      <div class="my-6 flex justify-between">
+        <button class="rounded bg-slate-900 text-xs sm:text-sm md:text-md text-white px-4 py-1 uppercase">
+          DIAGNOSIS
+        </button>
+      </div>
+      
+      {% for item in diagnosis_list %}
+      <div class="hover:shadow-2xl text-[11px] sm:text-sm my-4 px-4 py-[10px] sm:px-6 bg-gray-200 shadow-lg rounded-lg">
+
+        <div class="flex items-center justify-between my-2">
+          <div>
+            <h1 class="uppercase font-bold">Date</h1>
+            <p> {{item.date_created}} </p>
+          </div>
+
+          <div class="hidden xxs:block">
+            <h1 class="uppercase font-bold">Doctor</h1>
+            <p> {{item.doctor.full_name}} </p>
+          </div>
+
+          <div class="hidden xs:block">
+            <h1 class="uppercase font-bold">diagnosis</h1>
+            <p>{{item.diagnosis}}</p>
+          </div>
+
+          <div class="hidden xs:block">
+            <h1 class="uppercase font-bold">Type</h1>
+            <p>{{item.type}}</p>
+          </div>
+
+          <!-- <div>
+                <a href="diagnosis.html">
+                  <button class="rounded bg-blue-700 px-4 py-1 text-sm uppercase text-white">
+                    view
+                  </button>
+                </a>
+              </div> -->
+        </div>
+        <div class="flex justify-center space-x-4 pt-4">
+          <a href="{% url 'add_prescription' item.id  %}">
+            <button class="bg-blue-700 text-white font-bold py-2 px-4 rounded-lg uppercase">Add Prescription</button>
+          </a>
+          <a href="{% url 'add_investigation' item.id %}">
+            <button class="bg-blue-700 text-white font-bold py-2 px-4 rounded-lg uppercase">Add Investigation</button>
+          </a>
+        </div>
+
+      </div>
+      {% endfor %}
+      
+    </div>
+    <!-- end  -->
+
+  </div>
+</div>
+<!-- End RIGHT SIDE -->
+
+{% endblock content %}
